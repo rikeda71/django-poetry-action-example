@@ -1,4 +1,4 @@
-name: test
+name: ci
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: run tests using pytest
+    name: run tests with pytest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -45,3 +45,23 @@ jobs:
 
       - name: Run tests
         run: poetry run pytest -q tests
+
+  lint:
+    name: lint with pysen
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup up python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install pysen
+        run: |
+          pip install -U pip
+          pip install "pysen[lint]"
+
+      - name: Run lint check
+        run: pysen run lint

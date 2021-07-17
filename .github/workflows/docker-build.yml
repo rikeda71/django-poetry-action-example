@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - develop
-  pull_request:  # TODO: remove
 
 env:
   AWS_REGION: ap-northeast-1
@@ -21,12 +20,6 @@ jobs:
       - name: Set up for docker buildx
         id: setup-buildx
         uses: docker/setup-buildx-action@v1
-
-      - name: echo access key for test register environment variables
-        env:
-          ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        run:
-          echo ${ACCESS_KEY}
 
       - uses: aws-actions/configure-aws-credentials@v1
         with:
