@@ -18,24 +18,26 @@ jobs:
 
       - name: Setup up python 3.9
         uses: actions/setup-python@v2
+        id: setup-python
         with:
           python-version: 3.9
 
-      - name: Install poetry
+      - name: Install and set up poetry
         run: |
           pip install -U pip
           pip install poetry
+          source ~/.poetry/env
+          poetry config virtualenvs.in-project true
 
       - name: Cache pip packages
         uses: actions/cache@v2
         id: pip-cache
         with:
           path: |
-            ~/.cache/pip
             ~/.venv
-          key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
+          key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.version }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
+              ${{ runner.os }}-python-${{ steps.setup-python.outputs.version }}-${{ hashFiles('poetry.lock') }}
 
       - name: Install dependencies using poetry
         if: steps.pip-cache.outputs.cache-hit != 'true'
@@ -43,4 +45,4 @@ jobs:
           poetry install --no-interaction
 
       - name: Run tests
-        run: poetry run pytest -q tests/
+        run: poetry run pytest -q tests
