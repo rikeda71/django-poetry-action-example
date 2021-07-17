@@ -1,8 +1,8 @@
 import datetime
-from django.utils import timezone
-from polls.models import Question
 
 import pytest
+from django.utils import timezone
+from polls.models import Question
 
 
 @pytest.mark.django_db
