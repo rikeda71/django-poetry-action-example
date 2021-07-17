@@ -1,6 +1,12 @@
 name: lint
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - develop
+      - release
 
 jobs:
   lint:
@@ -21,4 +27,14 @@ jobs:
           pip install "pysen[lint]"
 
       - name: Run lint check
-        run: pysen lint
+        run: pysen run lint
+
+      - name: Cache pip packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
