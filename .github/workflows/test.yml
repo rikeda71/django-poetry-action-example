@@ -26,8 +26,6 @@ jobs:
         run: |
           pip install -U pip
           pip install poetry
-          source ${{github.workspace}}/.venv
-          poetry config virtualenvs.in-project true
 
       - name: Cache pip packages
         uses: actions/cache@v2
@@ -42,6 +40,7 @@ jobs:
       - name: Install dependencies using poetry
         if: steps.pip-cache.outputs.cache-hit != 'true'
         run: |
+          poetry config virtualenvs.in-project true
           poetry install --no-interaction
 
       - name: Run tests
