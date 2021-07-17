@@ -26,7 +26,7 @@ jobs:
         run: |
           pip install -U pip
           pip install poetry
-          source ~/.venv
+          source ${{github.workspace}}/.venv
           poetry config virtualenvs.in-project true
 
       - name: Cache pip packages
@@ -34,7 +34,7 @@ jobs:
         id: pip-cache
         with:
           path: |
-            ~/.venv
+            ${{github.workspace}}/.venv
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: |
               ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
