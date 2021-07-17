@@ -26,7 +26,7 @@ jobs:
         run: |
           pip install -U pip
           pip install poetry
-          source ~/.poetry/env
+          source ~/.venv
           poetry config virtualenvs.in-project true
 
       - name: Cache pip packages
@@ -35,9 +35,9 @@ jobs:
         with:
           path: |
             ~/.venv
-          key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.version }}-${{ hashFiles('poetry.lock') }}
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: |
-              ${{ runner.os }}-python-${{ steps.setup-python.outputs.version }}-${{ hashFiles('poetry.lock') }}
+              ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
 
       - name: Install dependencies using poetry
         if: steps.pip-cache.outputs.cache-hit != 'true'
