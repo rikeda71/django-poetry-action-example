@@ -1,0 +1,24 @@
+name: lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    name: lint with pysen
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup up python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+
+      - name: Install pysen
+        run: |
+          pip install -U pip
+          pip install "pysen[lint]"
+
+      - name: Run lint check
+        run: pysen lint

@@ -1,0 +1,40 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: run tests using pytest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup up python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+
+      - name: Install poetry
+        run: |
+          pip install -U pip
+          pip install poetry
+
+      - name: Install dependencies using poetry
+        run: |
+          poetry install --no-interaction
+
+      - name: Run tests
+        run: poetry run pytest -q tests/
+
+      - name: Cache pip packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.venv
+          key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+
